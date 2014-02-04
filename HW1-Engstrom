@@ -1,0 +1,30 @@
+HW1-aengstrom28
+===============
+
+HW-1 respository
++HW-1 Engstrom
++========================================================
++#Part 1:
++
++```{r}
++dbGetQuery(geo_con, "SELECT gse.title, gse.ID, gse.gse, gpl.ID, gpl.gpl, gpl.manufacturer, gpl.description FROM (gse INNER JOIN gse_gpl ON gse.gse=gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gse.title LIKE'%HCV%' and gse.title LIKE'%Illumina%'; ")
++```
++
++#Part 2:
++
++```{r}
++library(data.table)
++dbListTables(geo_con)
++gse.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse"))
++gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gpl"))
++gsm.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gsm"))
++gse_gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse_gpl"))
++setkey(gse.dt,gse)
++setkey(gpl.dt, gpl)
++setkey(gse_gpl.dt,gse)
++merge_a <- merge(gse.dt, gse_gpl.dt)
++setkey(merge_a,gpl)
++merge_b <- merge(merge_a, gpl.dt)
++merge_b['HCV']
++```
++
