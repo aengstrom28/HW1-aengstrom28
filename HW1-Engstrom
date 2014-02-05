@@ -15,17 +15,12 @@ HW-1 respository
 +```{r}
 +library(data.table)
 +dbListTables(geo_con)
+#create data.tables from gse, gpl, and gse_gpl data.frames
 +gse.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse"))
 +gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gpl"))
-+gsm.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gsm"))
 +gse_gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse_gpl"))
-+setkey(gse.dt,gse)
-+setkey(gpl.dt, gpl)
-+setkey(gse_gpl.dt,gse)
-+merge_a <- merge(gse.dt, gse_gpl.dt)
-+setkey(merge_a,gpl)
-+merge_b <- merge(merge_a, gpl.dt)
-+merge_b['HCV']
+#merge data.tables and query merged data.table
+merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis']
+merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis'][contact %like% 'Yale']
 +```
 +
-nnn
