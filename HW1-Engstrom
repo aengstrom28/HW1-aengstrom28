@@ -2,25 +2,19 @@ HW1-aengstrom28
 ===============
 
 HW-1 respository
-+HW-1 Engstrom
-+========================================================
-+#Part 1:
-+
-+```{r}
-+dbGetQuery(geo_con, "SELECT gse.title, gse.ID, gse.gse, gpl.ID, gpl.gpl, gpl.manufacturer, gpl.description FROM (gse INNER JOIN gse_gpl ON gse.gse=gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gse.title LIKE'%HCV%' and gse.title LIKE'%Illumina%'; ")
-+```
-+
-+#Part 2:
-+
-+```{r}
-+library(data.table)
-+dbListTables(geo_con)
-#create data.tables from gse, gpl, and gse_gpl data.frames
-+gse.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse"))
-+gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gpl"))
-+gse_gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse_gpl"))
-#merge data.tables and query merged data.table
-merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis']
-merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis'][contact %like% 'Yale']
-+```
-+
+HW-1 Engstrom
+========================================================
+#Part 1:
+> source("http://bioconductor.org/biocLite.R")
+> library(GEOmetadb)
+> dbGetQuery(geo_con, "SELECT gse.title, gse.contact, gse.ID, gse.gse, gpl.ID, gpl.gpl, gpl.manufacturer, gpl.description FROM (gse INNER JOIN gse_gpl ON gse.gse=gse_gpl.gse) j JOIN gpl ON j.gpl=gpl.gpl WHERE gse.title LIKE'%Hepatitis%' and gpl.manufacturer LIKE'%Illumina%' and gse.contact LIKE'%Yale%'; ")
+
+#Part 2:
+> library(data.table)
+> dbListTables(geo_con)
+> gse.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse"))
+> gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gpl"))
+> gse_gpl.dt<-as.data.table(dbGetQuery(geo_con, "SELECT * FROM gse_gpl"))
+> merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis']
+> merge(gse.dt,gse_gpl.dt,by="gse",all.y=TRUE)[title %like% 'Hepatitis'][contact %like% 'Yale']
+> merge(gse.dt,gpl.dt,by="title",all.x=TRUE)[title %like% 'Hepatitis'][contact.x %like% 'Yale']
